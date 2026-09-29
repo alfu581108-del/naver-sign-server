@@ -1,0 +1,359 @@
+<style id="bel-zoomfit-css">
+/* beleft-m-zoomfit.css v1.0 (2026-09-29)
+ * 짝꿍: beleft-m-zoomfit.js (bel-* 클래스를 붙임). 대상 기준폭 384px(갤럭시 S21 Ultra) · 360~430px.
+ * 글자 확대 130~200%에서도 가로 넘침·글자 세로쪼개짐·버튼 가림이 없도록.
+ */
+:root {
+  --bz-action: #566346;
+  --bz-action-hover: #414c34;
+  --bz-surface: #f1ede4;
+  --bz-card: #fbf8f2;
+  --bz-line: #d9d0bf;
+  --bz-ink: #2f2a24;
+  --bz-muted: #6f6a60;
+  --bz-radius: 8px;
+  --bel-buybar-h: 0px;
+  --bz-safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── 0. 전역 안전장치 ─────────────────────────── */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { overflow-x: clip; }
+/* 한글이 음절 단위로 쪼개지지 않게(띄어쓰기 기준 줄바꿈), 넘칠 때만 강제 줄바꿈 */
+.bel-rel, .bel-trust, .bel-optrow, .bel-sizefinder, .bel-bizinfo, .bel-footer__cs, .bel-tabs {
+  word-break: keep-all; overflow-wrap: anywhere;
+}
+
+/* ── 1. 상단 헤더: 내릴 때 숨기고 올릴 때 보이기 (화면 30%를 차지하던 크롬 회수) ── */
+.bel-topbar { transition: transform .25s ease; will-change: transform; }
+html.bel-scroll-down .bel-topbar { transform: translateY(-100%); }
+html.bel-scroll-down.bel-menu-open .bel-topbar { transform: none; }
+
+/* ── 2. 하단 구매바 ─────────────────────────── */
+.bel-buybar { padding-bottom: var(--bz-safe-b) !important; box-sizing: border-box; }
+.bel-buybar a, .bel-buybar button { min-height: 52px; white-space: nowrap; }
+
+/* ── 3. 떠 있는 위/아래 버튼: '아래'는 없애고 '위'만 작게, 구매바 위로 ── */
+.bel-fab__down { display: none !important; }
+.bel-fab {
+  left: auto !important; top: auto !important;
+  right: 12px !important;
+  bottom: calc(var(--bel-buybar-h) + 12px + var(--bz-safe-b)) !important;
+  width: auto !important; height: auto !important;
+  opacity: 0; pointer-events: none; transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 90 !important;
+}
+html.bel-scrolled-far .bel-fab { opacity: 1; pointer-events: auto; transform: none; }
+.bel-fab__up {
+  width: 44px !important; height: 44px !important; min-width: 0 !important;
+  margin: 0 !important;
+  background: rgba(251, 248, 242, .92) !important;
+  box-shadow: 0 2px 8px rgba(47, 42, 36, .14) !important;
+  border: 1px solid var(--bz-line) !important;
+  display: inline-flex !important; align-items: center; justify-content: center;
+}
+.bel-fab__up svg, .bel-fab__up img { width: 18px !important; height: 18px !important; }
+
+/* ── 4. 필수 옵션: 라벨 위 / 셀렉트 전체폭 ─────── */
+.bel-optrow, .bel-optrow > th, .bel-optrow > td { display: block !important; width: auto !important; }
+.bel-optrow > th { padding: 0 0 8px !important; text-align: left !important; font-weight: 600; color: var(--bz-ink); }
+.bel-optrow > td { padding: 0 !important; }
+.bel-select {
+  width: 100% !important; max-width: 100% !important; box-sizing: border-box;
+  min-height: 48px; height: auto !important;
+  padding: 10px 40px 10px 14px !important;
+  font-size: 16px !important; /* 16px 미만이면 iOS가 포커스 시 확대 */
+  line-height: 1.4 !important;
+  text-overflow: ellipsis; white-space: nowrap;
+  border: 1px solid var(--bz-line) !important; border-radius: var(--bz-radius) !important;
+  background-color: #fff;
+}
+
+/* ── 5. 본문 버튼줄: 구매하기 한 줄 전체 → 장바구니·관심상품 반반 ── */
+.bel-actions {
+  display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px;
+  width: auto !important; max-width: 100% !important; box-sizing: border-box;
+  margin-left: 0 !important; margin-right: 0 !important;
+}
+.bel-actions > * { width: auto !important; min-width: 0 !important; margin: 0 !important; float: none !important; box-sizing: border-box; }
+.bel-actions > a, .bel-actions > button, .bel-actions > span > a {
+  min-height: 52px; display: flex !important; align-items: center; justify-content: center;
+  white-space: nowrap; padding: 0 8px !important;
+}
+.bel-actions .bel-actions__buy, .bel-actions > :has(> .bel-actions__buy) { grid-column: 1 / -1; order: -1; }
+.bel-actions__buy { background: var(--bz-action) !important; border-color: var(--bz-action) !important; color: #fff !important; }
+.bel-npay { max-width: 100%; overflow: hidden; margin-left: 0 !important; margin-right: 0 !important; }
+
+/* ── 6. 탭: 잘리지 않게 가로 스크롤 ─────────── */
+.bel-tabs {
+  display: flex !important; flex-wrap: nowrap !important;
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.bel-tabs::-webkit-scrollbar { display: none; }
+.bel-tabs > * { flex: 1 0 auto !important; width: auto !important; float: none !important; }
+.bel-tabs a { display: flex !important; align-items: center; justify-content: center; min-height: 48px; padding: 0 14px !important; white-space: nowrap; }
+
+/* ── 7. 관련상품: 3칸 그리드 → 가로 스와이프 카드 ── */
+.bel-rel__title { position: relative; z-index: 1; margin-bottom: 16px !important; display: block; }
+.bel-rel {
+  display: flex !important; flex-wrap: nowrap !important; gap: 12px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 0 0 8px !important; margin: 0 !important;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.bel-rel::-webkit-scrollbar { display: none; }
+.bel-rel > li {
+  flex: 0 0 40% !important; width: auto !important; max-width: none !important;
+  float: none !important; margin: 0 !important; padding: 0 !important;
+  scroll-snap-align: start;
+}
+html.bel-bigtext .bel-rel > li { flex-basis: 62% !important; }
+.bel-rel > li img { width: 100% !important; height: auto; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+.bel-rel > li p, .bel-rel > li strong, .bel-rel > li .name {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  font-size: 14px !important; line-height: 1.4 !important; text-align: left !important; margin-top: 8px;
+}
+
+/* ── 8. 사이즈 찾기: 이중 테두리 제거 · 입력칸 48px ── */
+.bel-sf-grid { align-items: end !important; }
+.bel-sf-field {
+  display: flex !important; align-items: center; gap: 6px;
+  min-height: 48px; padding: 0 12px !important; box-sizing: border-box;
+  border: 1px solid var(--bz-line) !important; border-radius: var(--bz-radius) !important;
+  background: #fff !important; width: auto !important;
+}
+.bel-sf-field input {
+  flex: 1 1 auto; min-width: 0 !important; width: 100% !important;
+  border: 0 !important; outline: 0; box-shadow: none !important; background: transparent !important;
+  padding: 0 !important; height: 46px !important; font-size: 16px !important; text-align: right;
+}
+.bel-sf-field:focus-within { border-color: var(--bz-action) !important; box-shadow: 0 0 0 2px rgba(86, 99, 70, .18); }
+.bel-sf-field > :not(input) { flex: none; color: var(--bz-muted); font-size: 14px !important; white-space: nowrap; }
+html.bel-bigtext .bel-sf-grid { grid-template-columns: 1fr !important; }
+
+/* ── 9. 신뢰 배지 ─────────────────────────── */
+.bel-trust { gap: 4px; }
+.bel-trust > * { min-width: 0; }
+html.bel-bigtext .bel-trust { font-size: 13px; }
+
+/* ── 10. 검색창 · 정렬 ───────────────────── */
+.bel-searchbar { display: flex !important; align-items: stretch; gap: 8px; }
+.bel-searchbar input[type=search], .bel-searchbar input[name=keyword] {
+  flex: 1 1 auto; min-width: 0; height: 48px !important; font-size: 16px !important; box-sizing: border-box;
+}
+.bel-searchbar button, .bel-searchbar a, .bel-searchbar input[type=submit] {
+  flex: none; height: 48px !important; min-width: 64px; margin: 0 !important; position: static !important;
+  display: inline-flex !important; align-items: center; justify-content: center;
+  background: var(--bz-action) !important; border-color: var(--bz-action) !important; color: #fff !important;
+  border-radius: var(--bz-radius) !important;
+}
+.bel-searchbar a[class*=del], .bel-searchbar button[class*=del], .bel-searchbar [class*=clear] {
+  background: transparent !important; color: var(--bz-muted) !important; min-width: 44px; border: 0 !important;
+}
+
+/* ── 11. 푸터 ─────────────────────────────── */
+.bel-footer__eyebrow { letter-spacing: .18em !important; }
+html.bel-bigtext .bel-footer__eyebrow { letter-spacing: .08em !important; }
+.bel-footer__cs a[href^="tel:"] { white-space: nowrap; }
+.bel-footer__copy { letter-spacing: .04em !important; }
+/* 사업자 정보: 라벨 | 값 2열, 값은 라벨 밑으로 흘러내리지 않음 */
+.bel-bizinfo { font-size: 13px; line-height: 1.6; }
+.bel-bizinfo dl, dl.bel-bizinfo, .bel-bizinfo li, .bel-bizinfo tr {
+  display: grid !important; grid-template-columns: max-content 1fr; column-gap: 12px; align-items: baseline;
+}
+.bel-bizinfo dt, .bel-bizinfo th { white-space: nowrap; }
+.bel-bizinfo dd, .bel-bizinfo td { margin: 0 !important; min-width: 0; }
+</style>
+<script id="bel-zoomfit-js">
+/* beleft-m-zoomfit.js v1.0 (2026-09-29)
+ * 모바일 "큰 글씨" 대응 — 카카오 인앱 '가가'·안드로이드 글꼴 크기 확대 시 깨지는 레이아웃 보정.
+ * 원칙: 확대를 막지 않는다(접근성). 마크업을 몰라도 되도록 화면 글자(구매하기·관련상품 등)로 요소를 찾아
+ * bel-* 클래스만 붙이고, 모양은 beleft-m-zoomfit.css 가 담당. 못 찾으면 아무 것도 안 함.
+ */
+(function () {
+  var d = document, h = d.documentElement;
+  if (h.getAttribute('data-bel-zoomfit')) return;
+  h.setAttribute('data-bel-zoomfit', '1.0');
+
+  function txt(el) { return (el.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function tag(el, cls) { if (el && el.classList && !el.classList.contains(cls)) el.classList.add(cls); return el; }
+  function all(sel, root) { return Array.prototype.slice.call((root || d).querySelectorAll(sel)); }
+  function byText(sel, re, root) { return all(sel, root).filter(function (el) { return re.test(txt(el)); }); }
+  /* 겹친 조상 대신 가장 안쪽 요소만 */
+  function innermost(list) { return list.filter(function (a) { return !list.some(function (b) { return b !== a && a.contains(b); }); }); }
+  function isFixed(el) { var p = getComputedStyle(el).position; return p === 'fixed' || p === 'sticky'; }
+
+  /* 1. 글자 확대 배율 측정 → html.bel-bigtext + --bel-tz */
+  function measureZoom() {
+    var p = d.createElement('span');
+    p.style.cssText = 'position:absolute;left:-9999px;top:0;font:400 20px/1 sans-serif;white-space:nowrap;visibility:hidden';
+    p.textContent = '가나다라마바사아자차';
+    d.body.appendChild(p);
+    var cs = parseFloat(getComputedStyle(p).fontSize) / 20 || 1;
+    var w = p.getBoundingClientRect().width / 200 || 1; /* 한글 10자 × 20px ≈ 200px */
+    d.body.removeChild(p);
+    var r = Math.max(cs, w);
+    h.style.setProperty('--bel-tz', r.toFixed(2));
+    h.classList.toggle('bel-bigtext', r >= 1.2);
+  }
+
+  /* 2. 하단 고정 구매바 · 떠 있는 위/아래 버튼 */
+
+  function fixedLayer() {
+    var vw = innerWidth, vh = innerHeight;
+    all('body *').forEach(function (el) {
+      if (el.closest('.bel-buybar,.bel-fab')) return;
+      var cs = getComputedStyle(el);
+      if (cs.position !== 'fixed' || cs.display === 'none') return;
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      /* 구매바: 화면 폭 거의 전체 + 바닥에 붙음 + '구매' 글자 */
+      if (r.width >= vw * 0.9 && r.bottom >= vh - 4 && r.height < vh * 0.4 && /구매|장바구니/.test(txt(el))) {
+        tag(el, 'bel-buybar');
+        h.style.setProperty('--bel-buybar-h', Math.round(r.height) + 'px');
+        return;
+      }
+      /* 떠 있는 동그라미 버튼: 오른쪽, 작음 */
+      if (r.left > vw * 0.55 && r.width < 110 && r.height < 220 && !/구매|장바구니/.test(txt(el))) {
+        var squares = Math.abs(r.width - r.height) < 10 && r.width > 30 ? [el]
+          : all('a,button,div,span', el).filter(function (c) {
+              var q = c.getBoundingClientRect();
+              return q.width > 30 && q.width < 90 && Math.abs(q.width - q.height) < 10;
+            });
+        if (!squares.length) return;
+        tag(el, 'bel-fab');
+        squares.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
+        if (squares.length > 1) { /* 위=맨 위로, 아래=맨 아래로 */
+          tag(squares[0], 'bel-fab__up');
+          squares.slice(1).forEach(function (s) { tag(s, 'bel-fab__down'); });
+        } else if (!/down|bottom|아래/i.test(el.className + ' ' + (el.getAttribute('aria-label') || ''))) {
+          tag(squares[0], 'bel-fab__up');
+        }
+      }
+    });
+    /* 상단 고정 헤더 스택(띠배너+헤더) */
+    all('body > *, body > * > *').forEach(function (el) {
+      if (!isFixed(el) || el.classList.contains('bel-buybar') || el.classList.contains('bel-fab')) return;
+      var r = el.getBoundingClientRect();
+      if (r.top <= 1 && r.width >= innerWidth * 0.9 && r.height > 30 && r.height < innerHeight * 0.45) tag(el, 'bel-topbar');
+    });
+  }
+
+  /* 3. 상품상세 */
+  function detail() {
+    /* 필수 옵션 행: 라벨 위, 셀렉트 전체폭 */
+    all('select').forEach(function (s) {
+      if (!/필수|옵션/.test(txt(s))) return;
+      var row = s.closest('tr') || s.parentElement && s.parentElement.parentElement;
+      tag(row, 'bel-optrow');
+      tag(s, 'bel-select');
+    });
+    /* 본문 안 버튼줄(장바구니·관심상품·구매하기) — 하단바 제외 */
+    byText('a,button', /^구매하기$/).forEach(function (b) {
+      if (b.closest('.bel-buybar')) return;
+      var p = b.parentElement;
+      for (var i = 0; p && i < 3; i++, p = p.parentElement) {
+        if (/장바구니/.test(txt(p))) { tag(p, 'bel-actions'); tag(b, 'bel-actions__buy'); break; }
+      }
+    });
+    /* 네이버페이 버튼: 폭이 넘치면 비율 축소 */
+    all('#NaverChk_Button').forEach(function (n) {
+      var inner = n.firstElementChild; if (!inner) return;
+      inner.style.transform = ''; n.style.height = '';
+      var need = inner.scrollWidth, have = n.clientWidth;
+      if (need > have + 2 && have > 0) {
+        var k = have / need;
+        inner.style.transformOrigin = '0 0';
+        inner.style.transform = 'scale(' + k.toFixed(3) + ')';
+        n.style.height = Math.ceil(inner.getBoundingClientRect().height) + 'px';
+      }
+      tag(n, 'bel-npay');
+    });
+    /* 탭(상세정보·구매안내·상품후기·Q&A) → 가로 스크롤 */
+    innermost(byText('ul,div,nav', /상세정보.*구매안내|상세정보.*상품후기/).filter(function (el) {
+      return el.children.length >= 3 && el.children.length <= 6 && txt(el).length < 60;
+    })).forEach(function (el) { tag(el, 'bel-tabs'); });
+    /* 관련상품 → 가로 스와이프 카드 */
+    byText('h2,h3,h4,strong,p,div', /^관련\s?상품$/).forEach(function (hd) {
+      tag(hd, 'bel-rel__title');
+      var sec = hd.parentElement;
+      for (var i = 0; sec && i < 3; i++, sec = sec.parentElement) {
+        var ul = sec.querySelector('ul');
+        if (ul && ul.children.length) { tag(ul, 'bel-rel'); break; }
+      }
+    });
+    /* 사이즈 찾기 위젯 */
+    byText('a,button', /사이즈\s?추천받기/).forEach(function (b) {
+      var box = b.parentElement;
+      while (box && box.querySelectorAll('input').length < 3) box = box.parentElement;
+      if (!box) return;
+      tag(box, 'bel-sizefinder');
+      all('input', box).forEach(function (inp) {
+        if (/radio|checkbox|hidden/.test(inp.type)) return;
+        inp.setAttribute('inputmode', 'decimal');
+        var f = tag(inp.parentElement, 'bel-sf-field');
+        if (f.parentElement) tag(f.parentElement.parentElement, 'bel-sf-grid');
+      });
+    });
+    /* 신뢰 배지(국내생산·당일발송·교환반품) */
+    byText('p,strong,span,div', /^국내생산$/).forEach(function (el) {
+      var p = el.parentElement;
+      while (p && !/당일발송/.test(txt(p))) p = p.parentElement;
+      tag(p, 'bel-trust');
+    });
+  }
+
+  /* 4. 검색결과·목록·푸터 */
+  function listAndFooter() {
+    all('select').forEach(function (s) { if (/기준선택/.test(txt(s))) tag(s, 'bel-select'); });
+    all('input[type=search], input[name=keyword]').forEach(function (inp) {
+      var p = inp.parentElement;
+      for (var i = 0; p && i < 3; i++, p = p.parentElement) {
+        if (byText('a,button,input[type=submit]', /^검색$/, p).length || p.querySelector('input[type=submit],button[type=submit]')) {
+          tag(p, 'bel-searchbar'); break;
+        }
+      }
+    });
+    byText('p,strong,span,div,h2,h3', /^CUSTOMER CENTER$/i).forEach(function (el) {
+      tag(el, 'bel-footer__eyebrow');
+      tag(el.parentElement, 'bel-footer__cs');
+    });
+    innermost(byText('dl,ul,div,table', /사업자등록번호/).filter(function (el) {
+      return /통신판매업/.test(txt(el)) && txt(el).length < 400;
+    })).forEach(function (el) { tag(el, 'bel-bizinfo'); });
+    byText('p,span,div', /^©\s?\d{4}/).forEach(function (el) { tag(el, 'bel-footer__copy'); });
+  }
+
+  /* 5. 스크롤: 헤더 숨김/노출 · 위로 버튼 */
+  var lastY = scrollY, ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      var y = scrollY, dy = y - lastY;
+      if (Math.abs(dy) > 6) { h.classList.toggle('bel-scroll-down', dy > 0 && y > 160); lastY = y; }
+      h.classList.toggle('bel-scrolled-far', y > innerHeight * 1.2);
+      ticking = false;
+    });
+  }
+
+  function run() {
+    try { measureZoom(); fixedLayer(); detail(); listAndFooter(); } catch (e) { /* 보정 실패해도 페이지는 그대로 */ }
+  }
+
+  function start() {
+    run();
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('load', run);
+    addEventListener('resize', function () { clearTimeout(start.t); start.t = setTimeout(run, 200); });
+    /* 카페24가 늦게 그리는 것(관련상품·N페이·사이즈 위젯) — 10초 동안만 따라감 */
+    if (window.MutationObserver) {
+      var t, mo = new MutationObserver(function () { clearTimeout(t); t = setTimeout(run, 300); });
+      mo.observe(d.body, { childList: true, subtree: true });
+      setTimeout(function () { mo.disconnect(); }, 10000);
+    }
+  }
+
+  if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>

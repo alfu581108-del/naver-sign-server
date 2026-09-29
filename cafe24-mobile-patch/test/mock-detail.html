@@ -1,0 +1,57 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mock</title>
+<style>
+/* 카페24 모바일 스킨을 흉내 — --z 로 글자 확대(카카오 '가가') 재현 */
+:root{--z:1}
+body{margin:0;font-family:sans-serif;font-size:calc(14px*var(--z));background:#f0f0f0;padding-bottom:90px}
+#top{position:fixed;top:0;left:0;right:0;z-index:50}
+.notice{background:#2b2622;color:#eee;height:44px;line-height:44px;padding:0 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:calc(15px*var(--z))}
+.hd{background:#f1ede4;height:88px;display:flex;align-items:center;justify-content:center;font-size:calc(22px*var(--z))}
+main{padding-top:132px}
+.wrap{margin:0 16px;background:#fff;padding:16px}
+table{width:100%;border-collapse:collapse}th{width:90px;text-align:left}
+select{width:100%;height:40px;font-size:calc(14px*var(--z))}
+.btnrow{background:#f1ede4;padding:16px;margin-left:24px;white-space:nowrap}
+.btnrow a{display:inline-block;width:110px;height:56px;line-height:56px;text-align:center;border:1px solid #566346;font-size:calc(16px*var(--z))}
+#NaverChk_Button{margin:12px 0}#NaverChk_Button>div{width:360px;height:60px;background:#03c75a}
+.tab{display:flex}.tab li{list-style:none;width:25%}.tab a{display:block;text-align:center;height:48px;line-height:48px;font-size:calc(16px*var(--z))}
+.sf{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sf label{display:block}.box{border:1px solid #ccc;padding:4px;display:flex}.box input{width:60px;border:1px solid #ccc;height:36px;font-size:calc(16px*var(--z))}
+.trust{display:flex;justify-content:space-between;text-align:center}
+.rel h3{margin:0 0 -12px}.rel ul{padding:0;margin:0;overflow:hidden}.rel li{float:left;width:33.33%;list-style:none;padding:4px;box-sizing:border-box}.rel img{width:100%;height:100px;background:#ddd;display:block}.rel .name{font-size:calc(16px*var(--z))}
+#fab{position:fixed;right:8px;bottom:120px;width:60px}#fab a{display:block;width:56px;height:56px;border-radius:50%;background:#fff;margin-top:8px;border:1px solid #ccc}
+#bar{position:fixed;left:0;right:0;bottom:0;background:#fff;display:flex;gap:8px;padding:8px}#bar a{flex:1;height:56px;line-height:56px;text-align:center;border:1px solid #566346;font-size:calc(18px*var(--z))}
+.search{display:flex;position:relative}.search input{flex:1;height:36px}.search button{height:44px;margin-top:-4px;background:#4a5164;color:#fff}
+.biz dl{display:block}.biz dt{float:left;width:30%}
+</style></head><body>
+<div id="top"><div class="notice">FOR ANGEL'S DWELL · 귀한 아이를 위한 옷 · 회원가입 시 1,000원 적립금 증정</div><div class="hd">BE:LEFT ANGEL</div></div>
+<main>
+<div class="wrap">
+ <h1>아에르 아기 바디수트</h1><p>27,800원</p>
+ <div class="trust"><div><strong>국내생산</strong><p>Made in Korea</p></div><div><strong>당일발송</strong><p>오후 12시</p></div><div><strong>교환·반품</strong><p>공감안심동행제</p></div></div>
+ <div class="sfw"><div class="sf">
+  <div><label>개월 수</label><div class="box"><input type="text" value="6"><span>개월</span></div></div>
+  <div><label>머리둘레 (선택)</label><div class="box"><input type="text" value="43"><span>cm</span></div></div>
+  <div><label>키</label><div class="box"><input type="text" value="68"><span>cm</span></div></div>
+  <div><label>몸무게</label><div class="box"><input type="text" value="8.0"><span>kg</span></div></div>
+ </div><a href="#" class="sfbtn">사이즈 추천받기</a></div>
+ <table><tr><th>아에르 사이즈/색상</th><td><select><option>- [필수] 옵션을 선택해 주세요 -</option><option>70 / 라벤더</option></select></td></tr></table>
+ <div class="btnrow"><a href="#">장바구니</a><a href="#">관심상품</a><a href="#">구매하기</a></div>
+ <div id="NaverChk_Button"><div>N pay 구매 · 찜</div></div>
+</div>
+<ul class="tab"><li><a href="#">상세정보</a></li><li><a href="#">구매안내</a></li><li><a href="#">상품후기</a></li><li><a href="#">Q&amp;A</a></li></ul>
+<div class="wrap" style="height:600px">상세 본문</div>
+<div class="wrap rel"><h3>관련상품</h3><ul>
+ <li><img alt=""><p class="name">아에르 2중 요루거즈 고쟁이</p><p>29,800원</p></li>
+ <li><img alt=""><p class="name">배내박스 패키지</p><p>39,800원</p></li>
+ <li><img alt=""><p class="name">메쉬 바디수트 (6-12M)</p><p>34,800원</p></li>
+ <li><img alt=""><p class="name">아에르 배냇저고리</p><p>24,800원</p></li>
+</ul></div>
+<div class="wrap"><div class="search"><input type="search" name="keyword" value="배냇"><button type="submit">검색</button></div>
+<select><option>::: 기준선택 :::</option></select></div>
+<footer class="wrap"><div><p>CUSTOMER CENTER</p><a href="tel:0000">010-0000-0000</a><p>평일 10:00 - 17:00 · 점심 12:00 - 13:00</p></div>
+<div class="biz"><dl><dt>법인명(상호)</dt><dd>주식회사 비리프</dd><dt>사업자등록번호</dt><dd>000-00-00000</dd><dt>통신판매업</dt><dd>제 2025-경기구리-0000 호</dd><dt>주소</dt><dd>경기도 구리시 안골로 6, 201호</dd></dl></div>
+<p>© 2026 BE:LEFT ANGEL All Rights Reserved.</p><div style="height:900px"></div></footer>
+</main>
+<div id="fab"><a href="#top" aria-label="up"></a><a href="#bottom" aria-label="down"></a></div>
+<div id="bar"><a href="#">♡</a><a href="#">장바구니</a><a href="#">구매하기</a></div>
+</body></html>
