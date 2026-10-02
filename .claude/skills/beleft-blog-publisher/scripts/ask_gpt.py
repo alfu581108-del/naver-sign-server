@@ -17,10 +17,8 @@ def main():
     if len(sys.argv) < 2:
         print(__doc__)
         return 64
-    key = os.environ.get("OPENAI_API_KEY")
-    if not key:
-        print("OPENAI_API_KEY 없음 — 3자회의 GPT 경로 불가", file=sys.stderr)
-        return 3
+    # 클라우드 환경의 API credentials를 쓰면 프록시가 헤더를 주입하므로 세션엔 키가 없다.
+    key = os.environ.get("OPENAI_API_KEY", "injected-by-proxy")
     model = os.environ.get("GPT_MODEL", DEFAULT_MODEL)
     prompt = open(sys.argv[1], encoding="utf-8").read()
     req = urllib.request.Request(
@@ -32,8 +30,14 @@ def main():
         with urllib.request.urlopen(req, timeout=600) as r:
             data = json.load(r)
     except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            print(f"인증 실패 {e.code} — 키 미설정이거나 네트워크/credential 미등록. 3자회의 경로 불가로 보고", file=sys.stderr)
+            return 3
         print(f"OpenAI 오류 {e.code}: {e.read().decode()[:500]}", file=sys.stderr)
         return 4
+    except urllib.error.URLError as e:
+        print(f"연결 실패 — 네트워크 허용 목록 확인: {e.reason}", file=sys.stderr)
+        return 3
     text = "".join(
         c.get("text", "")
         for item in data.get("output", [])

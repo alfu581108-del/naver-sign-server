@@ -13,11 +13,11 @@
 | 순서 | GPT | 제미나이 |
 |---|---|---|
 | 1 | OpenAI API — `scripts/ask_gpt.py` (`OPENAI_API_KEY`) | Gemini API + Google 검색 그라운딩 — `scripts/ask_gemini.py` (`GEMINI_API_KEY`) |
-| 2 | ChatGPT 웹(chatgpt.com, 마리님 계정) — 브라우저 도구 필요 | Gemini 웹(gemini.google.com, 마리님 Pro 계정) — 브라우저 도구 필요 |
+| 2 | ChatGPT 웹은 **자동 조작 금지**(OpenAI 약관이 프로그램 방식 출력 추출을 금지). 마리님이 직접 붙여넣어 받은 원고만 쓴다 | Gemini 웹(gemini.google.com, 마리님 Pro 계정) — 브라우저 도구 필요 |
 | 3 | 불가 → SKILL.md 2절 "쓸 수 없을 때" | 불가 → 외부 사실 주장은 전부 빼거나 `[확인 필요]` |
 
 - 키는 클라우드 세션이면 환경(Environment) 설정의 환경변수/시크릿으로 넣는다. 키 값은 출력·기록 금지.
-- 모델은 환경변수 `GPT_MODEL`, `GEMINI_MODEL`로 바꿀 수 있다. 사용한 모델명은 발행 메모에 남긴다.
+- 모델은 환경변수 `GPT_MODEL`, `GEMINI_MODEL`로 바꿀 수 있다. 스크립트 기본값(gpt-5, gemini-2.5-pro)은 안전한 하한일 뿐이다. 2026-10 조사에서 더 새 모델(GPT-6 계열, Gemini 3.x)이 2차 출처로 보고됐으나 공식 페이지를 열지 못해 미확정 — 첫 실행 전에 공식 모델 목록에서 확인하고 설정한다. 사용한 모델명은 발행 메모에 남긴다.
 - 웹 UI 경로에서는 개인화(메모리)가 섞일 수 있다. 새 대화(임시 채팅)에서 브리프 전체를 붙여 넣는다.
 
 ## 1단계: 클로드 → 브리프 작성

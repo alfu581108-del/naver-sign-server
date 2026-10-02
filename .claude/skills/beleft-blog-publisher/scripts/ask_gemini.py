@@ -18,10 +18,8 @@ def main():
     if len(sys.argv) < 2:
         print(__doc__)
         return 64
-    key = os.environ.get("GEMINI_API_KEY")
-    if not key:
-        print("GEMINI_API_KEY 없음 — 3자회의 제미나이 경로 불가", file=sys.stderr)
-        return 3
+    # 클라우드 환경의 API credentials를 쓰면 프록시가 헤더를 주입하므로 세션엔 키가 없다.
+    key = os.environ.get("GEMINI_API_KEY", "injected-by-proxy")
     model = os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
     prompt = open(sys.argv[1], encoding="utf-8").read()
     body = {
@@ -37,8 +35,18 @@ def main():
         with urllib.request.urlopen(req, timeout=600) as r:
             data = json.load(r)
     except urllib.error.HTTPError as e:
-        print(f"Gemini 오류 {e.code}: {e.read().decode()[:500]}", file=sys.stderr)
+        if e.code in (401, 403):
+            print(f"인증 실패 {e.code} — 키 미설정이거나 네트워크/credential 미등록. 3자회의 경로 불가로 보고", file=sys.stderr)
+            return 3
+        detail = e.read().decode()
+        if "API_KEY_INVALID" in detail:
+            print("Gemini 키 없음/무효 — 3자회의 제미나이 경로 불가로 보고", file=sys.stderr)
+            return 3
+        print(f"Gemini 오류 {e.code}: {detail[:500]}", file=sys.stderr)
         return 4
+    except urllib.error.URLError as e:
+        print(f"연결 실패 — 네트워크 허용 목록 확인: {e.reason}", file=sys.stderr)
+        return 3
     cand = (data.get("candidates") or [{}])[0]
     text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []))
     chunks = cand.get("groundingMetadata", {}).get("groundingChunks", [])
